@@ -17,10 +17,6 @@ enum TunaCatObjectType: UInt32 {
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    
-    
-    
-    
     private var cat = SKSpriteNode(imageNamed: "myCat")
     private var kitchen = SKSpriteNode(imageNamed: "kitchen_background")
     private var tunaCan = SKSpriteNode(imageNamed: "tunaCan")
@@ -31,12 +27,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var challange = SKLabelNode()
     
     override func didMove(to view: SKView) {
-        
         cat.name = "kitty"
         cat.position = CGPoint(x: 100, y: 100)
         cat.zPosition = 2
         cat.size = CGSize(width: 170,height: 100)
-        cat.physicsBody = SKPhysicsBody(circleOfRadius: 10.0)
+        cat.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: cat.size.width-50, height: cat.size.height-34))
+        cat.physicsBody?.mass = 0.01
         cat.physicsBody?.allowsRotation = false
         cat.physicsBody?.restitution = 0.6
         cat.physicsBody?.contactTestBitMask = TunaCatObjectType.tunaCan.rawValue
@@ -45,17 +41,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cat.zPosition = 2
         addChild(cat)
         
-        physicsBody = SKPhysicsBody(edgeLoopFrom: frame.insetBy(dx: 0, dy: 10))
+        physicsBody = SKPhysicsBody(edgeLoopFrom: frame.insetBy(dx: 0, dy: 0))
         physicsWorld.contactDelegate = self
         
         kitchen.position = CGPoint(x: size.width/2, y: size.height/2)
-        kitchen.zPosition = 1
+        kitchen.zPosition = 0
+        kitchen.size = CGSize(width: frame.size.width, height: frame.size.height + 20)
         addChild(kitchen)
         
         tunaCan.name = "tunaCan"
-        tunaCan.position = CGPoint(x: size.width * 0.9, y: 400)
+        tunaCan.position = CGPoint(x: size.width * 0.8, y: 302)
         tunaCan.size = CGSize(width: 40, height: 30)
-        tunaCan.zPosition = 0
+        tunaCan.zPosition = 1
         tunaCan.physicsBody = SKPhysicsBody(circleOfRadius: 10.0)
         tunaCan.physicsBody?.allowsRotation = false
         tunaCan.physicsBody?.affectedByGravity = false
@@ -89,11 +86,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         endGamePauseTimer = nil
     }
 
-    func startwOver() {
+    func startOver() {
          cat.physicsBody?.allowsRotation = true
         cat.position = CGPoint(x: 100, y: 100)
         tunaCan.physicsBody?.affectedByGravity = false
-        tunaCan.position = CGPoint(x: size.width * 0.9, y: 400)
+        tunaCan.position = CGPoint(x: size.width * 0.8, y: 302)
         needsRestart = false
         kitchen.isHidden =  false
         tunaCan.isHidden = false
@@ -122,12 +119,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if levelCleared {
-            endGamePauseTimer = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
+            endGamePauseTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
             return
         }
         
         if needsRestart {
-            startwOver()
+            startOver()
         } else {
             let multiplier = pos.x > size.width/2 ? 1 : -1
             cat.physicsBody?.applyImpulse(CGVector(dx: multiplier*3, dy: 5))

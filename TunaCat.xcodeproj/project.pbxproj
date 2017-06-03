@@ -105,6 +105,7 @@
 				TargetAttributes = {
 					6857313C1EE0D6F400B54644 = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = KHTY3E6HX2;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -272,7 +273,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KHTY3E6HX2;
 				INFOPLIST_FILE = TunaCat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.icloud.nicxellent.TunaCat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -284,7 +287,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KHTY3E6HX2;
 				INFOPLIST_FILE = TunaCat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.icloud.nicxellent.TunaCat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
