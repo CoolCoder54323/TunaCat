@@ -15,9 +15,22 @@ enum TunaCatObjectType: UInt32 {
     case cat = 2
     case tunaCan = 4
     case sprayBottle = 8
+    case shoe = 16
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    
+   
+    
+    func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+    
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
+    }
+
     
     private var cat = SKSpriteNode(imageNamed: "myCat")
     private var kitchen = SKSpriteNode(imageNamed: "kitchen_background")
@@ -29,6 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var challange = SKLabelNode()
     
     override func didMove(to view: SKView) {
+        
         cat.name = "kitty"
         cat.position = CGPoint(x: 100, y: 100)
         cat.zPosition = 2
@@ -59,7 +73,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         addLevelClearedLabel()
         addChild(challange)
-        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(throwSprayBottle),SKAction.wait(forDuration: 0.5)])))
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(launchShoe),SKAction.wait(forDuration: 2)])))
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(throwSprayBottle),SKAction.wait(forDuration: 2)])))
         backgroundColor = SKColor.white
     }
     
@@ -82,6 +97,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bottle.physicsBody?.restitution = 0.5
         addChild(bottle)
         bottle.physicsBody?.applyImpulse(CGVector(dx: 30, dy: 20))
+    }
+    
+    func launchShoe() {
+        
+        let shoe = SKSpriteNode(imageNamed: "shoe")
+        shoe.position = CGPoint(x: frame.size.width + shoe.size.width,y: random(min:0,max:frame.size.height) )
+        shoe.size = CGSize(width:90,height:70)
+        shoe.zPosition = 5
+        addPhysicsBody(toNode: shoe, ofRadius: 10, withCategoryMask: .shoe, contactMask: .cat, andCollisionMask: .none)
+        addChild(shoe)
+        shoe.physicsBody?.applyImpulse(CGVector(dx:-30,dy:9))
     }
     
     func setNeedsRestart() {
