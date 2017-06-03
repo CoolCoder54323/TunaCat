@@ -10,9 +10,11 @@ import SpriteKit
 import GameplayKit
 
 enum TunaCatObjectType: UInt32 {
-    case cat = 1
-    case tunaCan = 2
-    case border = 4
+    case none = 0
+    case border = 1
+    case cat = 2
+    case tunaCan = 4
+    case sprayBottle = 8
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -31,13 +33,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cat.position = CGPoint(x: 100, y: 100)
         cat.zPosition = 2
         cat.size = CGSize(width: 170,height: 100)
-        cat.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: cat.size.width-50, height: cat.size.height-34))
+        addPhysicsBody(toNode: cat, withRectangleOf: CGSize(width: cat.size.width-50, height: cat.size.height-34), withCategoryMask: .cat, contactMask: .tunaCan, andCollisionMask: .border)
         cat.physicsBody?.mass = 0.01
         cat.physicsBody?.allowsRotation = false
         cat.physicsBody?.restitution = 0.6
-        cat.physicsBody?.contactTestBitMask = TunaCatObjectType.tunaCan.rawValue
-        cat.physicsBody?.collisionBitMask = TunaCatObjectType.border.rawValue
-        cat.physicsBody?.categoryBitMask = TunaCatObjectType.cat.rawValue
         cat.zPosition = 2
         addChild(cat)
         
@@ -53,14 +52,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tunaCan.position = CGPoint(x: size.width * 0.8, y: 302)
         tunaCan.size = CGSize(width: 40, height: 30)
         tunaCan.zPosition = 1
-        tunaCan.physicsBody = SKPhysicsBody(circleOfRadius: 10.0)
+        addPhysicsBody(toNode: tunaCan, ofRadius: 10.0, withCategoryMask: .tunaCan, contactMask: .cat, andCollisionMask: .border)
         tunaCan.physicsBody?.allowsRotation = false
         tunaCan.physicsBody?.affectedByGravity = false
-        tunaCan.physicsBody?.contactTestBitMask = TunaCatObjectType.cat.rawValue
-        tunaCan.physicsBody?.collisionBitMask = TunaCatObjectType.border.rawValue
-        tunaCan.physicsBody?.categoryBitMask = TunaCatObjectType.tunaCan.rawValue
         addChild(tunaCan)
         
+        addLevelClearedLabel()
+        addChild(challange)
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(throwSprayBottle),SKAction.wait(forDuration: 0.5)])))
+        backgroundColor = SKColor.white
+    }
+    
+    func addLevelClearedLabel() {
         levelClearedLabel.position = CGPoint(x: size.width/2, y: size.height/2)
         levelClearedLabel.fontColor = SKColor.red
         levelClearedLabel.fontSize = 44.0
@@ -68,14 +71,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         levelClearedLabel.isHidden = true
         levelClearedLabel.zPosition = 4
         addChild(levelClearedLabel)
-        
-        
-        
-        addChild(challange)
-        
-        
-        
-        backgroundColor = SKColor.white
+    }
+    
+    func throwSprayBottle() {
+        let bottle = SKSpriteNode(imageNamed: "sprayBottle")
+        bottle.zPosition = 10
+        bottle.size = CGSize(width: 40, height: 30)
+        bottle.position = CGPoint(x: (bottle.size.width * -1), y: size.height/2)
+        addPhysicsBody(toNode: bottle, withRectangleOf: CGSize(width: bottle.size.width, height: bottle.size.height), withCategoryMask: .sprayBottle, contactMask: .cat, andCollisionMask: .none)
+        bottle.physicsBody?.restitution = 0.5
+        addChild(bottle)
+        bottle.physicsBody?.applyImpulse(CGVector(dx: 30, dy: 20))
     }
     
     func setNeedsRestart() {
@@ -100,7 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didEnd(_ contact: SKPhysicsContact) {
-        let contactMade = contact.bodyA.contactTestBitMask | contact.bodyB.contactTestBitMask
+        let contactMade = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if contactMade == TunaCatObjectType.cat.rawValue | TunaCatObjectType.tunaCan.rawValue {
             endGameAndPause()
         }
@@ -118,6 +124,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
     }
     
+    //MARK: PhysicsBody Config Helper Functions
+    func addPhysicsBody(toNode node: SKSpriteNode, withRectangleOf size: CGSize, withCategoryMask categoryMask: TunaCatObjectType, contactMask: TunaCatObjectType, andCollisionMask collisionMask: TunaCatObjectType) {
+        node.physicsBody = SKPhysicsBody(rectangleOf: size)
+        addPhysicsMasks(toNode: node, withCategoryMask: categoryMask, contactMask: contactMask, andCollisionMask: collisionMask)
+    }
+    
+    func addPhysicsBody(toNode node: SKSpriteNode, ofRadius radius: CGFloat, withCategoryMask categoryMask: TunaCatObjectType, contactMask: TunaCatObjectType, andCollisionMask collisionMask: TunaCatObjectType) {
+        node.physicsBody = SKPhysicsBody(circleOfRadius: radius)
+        addPhysicsMasks(toNode: node, withCategoryMask: categoryMask, contactMask: contactMask, andCollisionMask: collisionMask)
+    }
+    
+    func addPhysicsMasks(toNode node: SKSpriteNode, withCategoryMask categoryMask: TunaCatObjectType, contactMask: TunaCatObjectType, andCollisionMask collisionMask: TunaCatObjectType) {
+        node.physicsBody?.categoryBitMask = categoryMask.rawValue
+        node.physicsBody?.contactTestBitMask = contactMask.rawValue
+        node.physicsBody?.collisionBitMask = collisionMask.rawValue
+    }
+    
+    //MARK: Touch Handling Functions
     func touchDown(atPoint pos : CGPoint) {
         guard endGamePauseTimer == nil && !levelCleared else { return }
         
@@ -154,5 +178,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
+    
 }
 
