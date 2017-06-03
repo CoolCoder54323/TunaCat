@@ -87,7 +87,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func startOver() {
-         cat.physicsBody?.allowsRotation = true
+        cat.physicsBody?.allowsRotation = true
         cat.position = CGPoint(x: 100, y: 100)
         tunaCan.physicsBody?.affectedByGravity = false
         tunaCan.position = CGPoint(x: size.width * 0.8, y: 302)
@@ -102,26 +102,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didEnd(_ contact: SKPhysicsContact) {
         let contactMade = contact.bodyA.contactTestBitMask | contact.bodyB.contactTestBitMask
         if contactMade == TunaCatObjectType.cat.rawValue | TunaCatObjectType.tunaCan.rawValue {
-            tunaCan.physicsBody?.affectedByGravity = true
-            levelClearedLabel.isHidden = false
-            backgroundColor = SKColor.black
-            kitchen.isHidden = true
-            tunaCan.isHidden = true
-            cat.isHidden = true
-            levelCleared = true
-            levelClearedLabel.text = "Level Cleared!!!"
+            endGameAndPause()
         }
     }
     
+    func endGameAndPause() {
+        tunaCan.physicsBody?.affectedByGravity = true
+        levelClearedLabel.isHidden = false
+        backgroundColor = SKColor.black
+        kitchen.isHidden = true
+        tunaCan.isHidden = true
+        cat.isHidden = true
+        levelCleared = true
+        levelClearedLabel.text = "Level Cleared!!!"
+        endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
+    }
+    
     func touchDown(atPoint pos : CGPoint) {
-        if endGamePauseTimer != nil {
-            return
-        }
-        
-        if levelCleared {
-            endGamePauseTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
-            return
-        }
+        guard endGamePauseTimer == nil && !levelCleared else { return }
         
         if needsRestart {
             startOver()
