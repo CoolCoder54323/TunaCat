@@ -1,0 +1,319 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		685731411EE0D6F400B54644 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685731401EE0D6F400B54644 /* AppDelegate.swift */; };
+		685731431EE0D6F400B54644 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 685731421EE0D6F400B54644 /* GameScene.sks */; };
+		685731451EE0D6F400B54644 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 685731441EE0D6F400B54644 /* Actions.sks */; };
+		685731471EE0D6F400B54644 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685731461EE0D6F400B54644 /* GameScene.swift */; };
+		685731491EE0D6F400B54644 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685731481EE0D6F400B54644 /* GameViewController.swift */; };
+		6857314C1EE0D6F400B54644 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6857314A1EE0D6F400B54644 /* Main.storyboard */; };
+		6857314E1EE0D6F400B54644 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6857314D1EE0D6F400B54644 /* Assets.xcassets */; };
+		685731511EE0D6F400B54644 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6857314F1EE0D6F400B54644 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6857313D1EE0D6F400B54644 /* TunaCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TunaCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		685731401EE0D6F400B54644 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		685731421EE0D6F400B54644 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		685731441EE0D6F400B54644 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
+		685731461EE0D6F400B54644 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		685731481EE0D6F400B54644 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		6857314B1EE0D6F400B54644 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6857314D1EE0D6F400B54644 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		685731501EE0D6F400B54644 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		685731521EE0D6F400B54644 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6857313A1EE0D6F400B54644 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		685731341EE0D6F400B54644 = {
+			isa = PBXGroup;
+			children = (
+				6857313F1EE0D6F400B54644 /* TunaCat */,
+				6857313E1EE0D6F400B54644 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6857313E1EE0D6F400B54644 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6857313D1EE0D6F400B54644 /* TunaCat.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6857313F1EE0D6F400B54644 /* TunaCat */ = {
+			isa = PBXGroup;
+			children = (
+				685731401EE0D6F400B54644 /* AppDelegate.swift */,
+				685731421EE0D6F400B54644 /* GameScene.sks */,
+				685731441EE0D6F400B54644 /* Actions.sks */,
+				685731461EE0D6F400B54644 /* GameScene.swift */,
+				685731481EE0D6F400B54644 /* GameViewController.swift */,
+				6857314A1EE0D6F400B54644 /* Main.storyboard */,
+				6857314D1EE0D6F400B54644 /* Assets.xcassets */,
+				6857314F1EE0D6F400B54644 /* LaunchScreen.storyboard */,
+				685731521EE0D6F400B54644 /* Info.plist */,
+			);
+			path = TunaCat;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6857313C1EE0D6F400B54644 /* TunaCat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 685731551EE0D6F400B54644 /* Build configuration list for PBXNativeTarget "TunaCat" */;
+			buildPhases = (
+				685731391EE0D6F400B54644 /* Sources */,
+				6857313A1EE0D6F400B54644 /* Frameworks */,
+				6857313B1EE0D6F400B54644 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TunaCat;
+			productName = TunaCat;
+			productReference = 6857313D1EE0D6F400B54644 /* TunaCat.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		685731351EE0D6F400B54644 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Nicholas Dixon";
+				TargetAttributes = {
+					6857313C1EE0D6F400B54644 = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 685731381EE0D6F400B54644 /* Build configuration list for PBXProject "TunaCat" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 685731341EE0D6F400B54644;
+			productRefGroup = 6857313E1EE0D6F400B54644 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6857313C1EE0D6F400B54644 /* TunaCat */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6857313B1EE0D6F400B54644 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6857314C1EE0D6F400B54644 /* Main.storyboard in Resources */,
+				685731431EE0D6F400B54644 /* GameScene.sks in Resources */,
+				6857314E1EE0D6F400B54644 /* Assets.xcassets in Resources */,
+				685731511EE0D6F400B54644 /* LaunchScreen.storyboard in Resources */,
+				685731451EE0D6F400B54644 /* Actions.sks in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		685731391EE0D6F400B54644 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				685731471EE0D6F400B54644 /* GameScene.swift in Sources */,
+				685731491EE0D6F400B54644 /* GameViewController.swift in Sources */,
+				685731411EE0D6F400B54644 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6857314A1EE0D6F400B54644 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6857314B1EE0D6F400B54644 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6857314F1EE0D6F400B54644 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				685731501EE0D6F400B54644 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		685731531EE0D6F400B54644 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		685731541EE0D6F400B54644 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		685731561EE0D6F400B54644 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TunaCat/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.icloud.nicxellent.TunaCat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		685731571EE0D6F400B54644 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TunaCat/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.icloud.nicxellent.TunaCat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		685731381EE0D6F400B54644 /* Build configuration list for PBXProject "TunaCat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685731531EE0D6F400B54644 /* Debug */,
+				685731541EE0D6F400B54644 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		685731551EE0D6F400B54644 /* Build configuration list for PBXNativeTarget "TunaCat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685731561EE0D6F400B54644 /* Debug */,
+				685731571EE0D6F400B54644 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 685731351EE0D6F400B54644 /* Project object */;
+}
