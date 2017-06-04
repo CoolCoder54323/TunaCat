@@ -29,7 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     
-    var second: Int = 0
+    var second: Int = 0 { didSet { if second >= 12 { endGameAndPause(withLevelCleared: false) } } }
     var timer = SKLabelNode()
     private var cat = SKSpriteNode(imageNamed: "myCat")
     private var kitchen = SKSpriteNode(imageNamed: "kitchen_background")
@@ -70,6 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tunaCan.size = CGSize(width: 40, height: 30)
         tunaCan.zPosition = 1
         addPhysicsBody(toNode: tunaCan, ofRadius: 10.0, withCategoryMask: .tunaCan, contactMasks: [.cat], andCollisionMasks: [.border,.cat])
+        tunaCan.physicsBody?.isDynamic = false
         tunaCan.physicsBody?.allowsRotation = false
         tunaCan.physicsBody?.affectedByGravity = false
         addChild(tunaCan)
@@ -80,18 +81,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(challange)
         backgroundColor = SKColor.white
         
-        
         //timer properties
         timer.fontName = "HelveticaNeue"
         timer.position = CGPoint(x:99,y: frame.size.height - 30)
         timer.fontColor = SKColor.black
         timer.zPosition = 6
         addChild(timer)
-        
-  
-  
-        
-        
     }
     
     func createLevels() {
@@ -101,8 +96,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                           TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 2)],
                          [TCLevelDef(withActionFunc: launchShoe, andActionPause: 1),
                           TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 1)],
-                        
-        ]
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.5),
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.5)],
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.25),
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.25)]
+                        ]
         
         for levelDef in levelDefs {
             levels.append(levelDef)
@@ -110,10 +108,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startActions() {
-        let level = currentLevel < levels.count ? currentLevel : levels.count - 1
         second = 0
-        run(SKAction.repeatForever(SKAction.sequence([SKAction.run({self.second = self.second + 1;self.timer.text = "\(self.second) seconds" }),SKAction.wait(forDuration: 1)])))
+        run(SKAction.repeat(SKAction.sequence([SKAction.run({self.second = self.second + 1;self.timer.text = "\(self.second) seconds" }),SKAction.wait(forDuration: 1)]), count: 180))
         
+        let level = currentLevel < levels.count ? currentLevel : levels.count - 1
         for levelDef in levels[level] {
             run(SKAction.repeatForever(SKAction.sequence([SKAction.run(levelDef.actionFunc),SKAction.wait(forDuration: levelDef.actionPause)])))
             
@@ -163,7 +161,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func startOver() {
         cat.physicsBody?.allowsRotation = true
         cat.position = CGPoint(x: 100, y: 100)
-        tunaCan.physicsBody?.affectedByGravity = false
+        //tunaCan.physicsBody?.affectedByGravity = false
         tunaCan.position = CGPoint(x: size.width * 0.8, y: 302)
         needsRestart = false
         kitchen.isHidden =  false
@@ -177,20 +175,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didEnd(_ contact: SKPhysicsContact) {
         let contactMade = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if contactMade == TunaCatObjectType.cat.rawValue | TunaCatObjectType.tunaCan.rawValue {
-            endGameAndPause()
+            endGameAndPause(withLevelCleared: true)
         }
     }
     
-    func endGameAndPause() {
-        tunaCan.physicsBody?.affectedByGravity = true
+    func endGameAndPause(withLevelCleared isLevelCleared: Bool) {
+        //tunaCan.physicsBody?.affectedByGravity = true
         levelClearedLabel.isHidden = false
         backgroundColor = SKColor.black
         kitchen.isHidden = true
         tunaCan.isHidden = true
         cat.isHidden = true
         levelCleared = true
-        levelClearedLabel.text = "Level Cleared!!!"
-        currentLevel = currentLevel + 1
+        levelClearedLabel.text = isLevelCleared ? "Level Cleared!!!" : "Level Fail!!!"
+        currentLevel = isLevelCleared ? currentLevel + 1 : currentLevel
         endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
         removeAllActions()
     }
