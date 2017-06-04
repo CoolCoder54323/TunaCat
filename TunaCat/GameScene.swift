@@ -20,9 +20,6 @@ enum TunaCatObjectType: UInt32 {
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    
-   
-    
     func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
@@ -40,6 +37,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var needsRestart = false
     private var endGamePauseTimer: Timer?
     private var challange = SKLabelNode()
+    private var levels: [[TCLevelDef]] = []
+    private var currentLevel: Int = 0
     
     override func didMove(to view: SKView) {
         
@@ -73,15 +72,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tunaCan.physicsBody?.affectedByGravity = false
         addChild(tunaCan)
         
+        createLevels()
         startActions()
         addLevelClearedLabel()
         addChild(challange)
         backgroundColor = SKColor.white
+        
+    }
+    
+    func createLevels() {
+        let levelDefs = [[],
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 2)],
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 2),
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 2)],
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 1),
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 1)],
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.7),
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.7)],
+                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.05),
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.05)],
+        ]
+        
+        for levelDef in levelDefs {
+            levels.append(levelDef)
+        }
     }
     
     func startActions() {
-        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(launchShoe),SKAction.wait(forDuration: 1)])))
-        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(throwSprayBottle),SKAction.wait(forDuration: 1)])))
+        let level = currentLevel < levels.count ? currentLevel : levels.count - 1
+        for levelDef in levels[level] {
+            run(SKAction.repeatForever(SKAction.sequence([SKAction.run(levelDef.actionFunc),SKAction.wait(forDuration: levelDef.actionPause)])))
+        }
     }
     
     func addLevelClearedLabel() {
@@ -98,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bottle = SKSpriteNode(imageNamed: "sprayBottle")
         bottle.zPosition = 10
         bottle.size = CGSize(width: 40, height: 30)
-        bottle.position = CGPoint(x: (bottle.size.width * -1), y: size.height/2)
+        bottle.position = CGPoint(x: (bottle.size.width * -1), y: random(min: 0.0, max: size.height))
         addPhysicsBody(toNode: bottle, withRectangleOf: CGSize(width: bottle.size.width, height: bottle.size.height), withCategoryMask: .sprayBottle, contactMasks: [.cat], andCollisionMasks: [.cat,.shoe])
         bottle.physicsBody?.restitution = 0.5
         addChild(bottle)
@@ -154,6 +175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cat.isHidden = true
         levelCleared = true
         levelClearedLabel.text = "Level Cleared!!!"
+        currentLevel = currentLevel + 1
         endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
         removeAllActions()
     }
@@ -220,4 +242,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
 }
+
+public struct TCLevelDef {
+    var actionFunc: (() -> Void)
+    var actionPause: TimeInterval
+            
+    init(withActionFunc actionFunc: @escaping (() -> Void), andActionPause actionPause: TimeInterval) {
+        self.actionFunc = actionFunc
+        self.actionPause = actionPause
+    }
+}
+
+
 
