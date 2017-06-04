@@ -47,7 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cat.position = CGPoint(x: 100, y: 100)
         cat.zPosition = 2
         cat.size = CGSize(width: 170,height: 100)
-        addPhysicsBody(toNode: cat, withRectangleOf: CGSize(width: cat.size.width-50, height: cat.size.height-34), withCategoryMask: .cat, contactMask: .tunaCan, andCollisionMask: .border)
+        addPhysicsBody(toNode: cat, withRectangleOf: CGSize(width: cat.size.width-50, height: cat.size.height-34), withCategoryMask: .cat, contactMasks: [.tunaCan], andCollisionMasks: [.shoe,.sprayBottle,.border])
         cat.physicsBody?.mass = 0.01
         cat.physicsBody?.allowsRotation = false
         cat.physicsBody?.restitution = 0.6
@@ -55,6 +55,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(cat)
         
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame.insetBy(dx: 0, dy: 0))
+        physicsBody?.categoryBitMask = TunaCatObjectType.border.rawValue
+        physicsBody?.collisionBitMask = 0
         physicsWorld.contactDelegate = self
         
         kitchen.position = CGPoint(x: size.width/2, y: size.height/2)
@@ -66,16 +68,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tunaCan.position = CGPoint(x: size.width * 0.8, y: 302)
         tunaCan.size = CGSize(width: 40, height: 30)
         tunaCan.zPosition = 1
-        addPhysicsBody(toNode: tunaCan, ofRadius: 10.0, withCategoryMask: .tunaCan, contactMask: .cat, andCollisionMask: .border)
+        addPhysicsBody(toNode: tunaCan, ofRadius: 10.0, withCategoryMask: .tunaCan, contactMasks: [.cat], andCollisionMasks: [.border,.cat])
         tunaCan.physicsBody?.allowsRotation = false
         tunaCan.physicsBody?.affectedByGravity = false
         addChild(tunaCan)
         
+        startActions()
         addLevelClearedLabel()
         addChild(challange)
-        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(launchShoe),SKAction.wait(forDuration: 2)])))
-        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(throwSprayBottle),SKAction.wait(forDuration: 2)])))
         backgroundColor = SKColor.white
+    }
+    
+    func startActions() {
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(launchShoe),SKAction.wait(forDuration: 1)])))
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run(throwSprayBottle),SKAction.wait(forDuration: 1)])))
     }
     
     func addLevelClearedLabel() {
@@ -93,7 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bottle.zPosition = 10
         bottle.size = CGSize(width: 40, height: 30)
         bottle.position = CGPoint(x: (bottle.size.width * -1), y: size.height/2)
-        addPhysicsBody(toNode: bottle, withRectangleOf: CGSize(width: bottle.size.width, height: bottle.size.height), withCategoryMask: .sprayBottle, contactMask: .cat, andCollisionMask: .none)
+        addPhysicsBody(toNode: bottle, withRectangleOf: CGSize(width: bottle.size.width, height: bottle.size.height), withCategoryMask: .sprayBottle, contactMasks: [.cat], andCollisionMasks: [.cat,.shoe])
         bottle.physicsBody?.restitution = 0.5
         addChild(bottle)
         bottle.physicsBody?.applyImpulse(CGVector(dx: 30, dy: 20))
@@ -105,9 +111,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         shoe.position = CGPoint(x: frame.size.width + shoe.size.width,y: random(min:0,max:frame.size.height) )
         shoe.size = CGSize(width:90,height:70)
         shoe.zPosition = 5
-        addPhysicsBody(toNode: shoe, ofRadius: 10, withCategoryMask: .shoe, contactMask: .cat, andCollisionMask: .none)
+        addPhysicsBody(toNode: shoe, ofRadius: 10, withCategoryMask: .shoe, contactMasks: [.cat], andCollisionMasks: [.cat,.sprayBottle])
         addChild(shoe)
-        shoe.physicsBody?.applyImpulse(CGVector(dx:-30,dy:9))
+        shoe.physicsBody?.applyImpulse(CGVector(dx:-10,dy:9))
     }
     
     func setNeedsRestart() {
@@ -129,6 +135,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cat.isHidden = false
         backgroundColor = SKColor.white
         levelClearedLabel.isHidden = true
+        startActions()
     }
     
     func didEnd(_ contact: SKPhysicsContact) {
@@ -148,23 +155,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         levelCleared = true
         levelClearedLabel.text = "Level Cleared!!!"
         endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
+        removeAllActions()
     }
     
     //MARK: PhysicsBody Config Helper Functions
-    func addPhysicsBody(toNode node: SKSpriteNode, withRectangleOf size: CGSize, withCategoryMask categoryMask: TunaCatObjectType, contactMask: TunaCatObjectType, andCollisionMask collisionMask: TunaCatObjectType) {
+    func addPhysicsBody(toNode node: SKSpriteNode, withRectangleOf size: CGSize, withCategoryMask categoryMask: TunaCatObjectType, contactMasks: [TunaCatObjectType], andCollisionMasks collisionMasks: [TunaCatObjectType]) {
         node.physicsBody = SKPhysicsBody(rectangleOf: size)
-        addPhysicsMasks(toNode: node, withCategoryMask: categoryMask, contactMask: contactMask, andCollisionMask: collisionMask)
+        addPhysicsMasks(toNode: node, withCategoryMask: categoryMask, contactMasks: contactMasks, andCollisionMasks: collisionMasks)
     }
     
-    func addPhysicsBody(toNode node: SKSpriteNode, ofRadius radius: CGFloat, withCategoryMask categoryMask: TunaCatObjectType, contactMask: TunaCatObjectType, andCollisionMask collisionMask: TunaCatObjectType) {
+    func addPhysicsBody(toNode node: SKSpriteNode, ofRadius radius: CGFloat, withCategoryMask categoryMask: TunaCatObjectType, contactMasks: [TunaCatObjectType], andCollisionMasks collisionMasks: [TunaCatObjectType]) {
         node.physicsBody = SKPhysicsBody(circleOfRadius: radius)
-        addPhysicsMasks(toNode: node, withCategoryMask: categoryMask, contactMask: contactMask, andCollisionMask: collisionMask)
+        addPhysicsMasks(toNode: node, withCategoryMask: categoryMask, contactMasks: contactMasks, andCollisionMasks: collisionMasks)
     }
     
-    func addPhysicsMasks(toNode node: SKSpriteNode, withCategoryMask categoryMask: TunaCatObjectType, contactMask: TunaCatObjectType, andCollisionMask collisionMask: TunaCatObjectType) {
+    func addPhysicsMasks(toNode node: SKSpriteNode, withCategoryMask categoryMask: TunaCatObjectType, contactMasks: [TunaCatObjectType], andCollisionMasks collisionMasks: [TunaCatObjectType]) {
         node.physicsBody?.categoryBitMask = categoryMask.rawValue
-        node.physicsBody?.contactTestBitMask = contactMask.rawValue
-        node.physicsBody?.collisionBitMask = collisionMask.rawValue
+        node.physicsBody?.contactTestBitMask = 0
+        for contactMask in contactMasks {
+            node.physicsBody?.contactTestBitMask = (node.physicsBody?.contactTestBitMask)! | contactMask.rawValue
+        }
+        node.physicsBody?.collisionBitMask = 0
+        for collisionMask in collisionMasks {
+            node.physicsBody?.collisionBitMask = (node.physicsBody?.collisionBitMask)! | collisionMask.rawValue
+        }
     }
     
     //MARK: Touch Handling Functions
