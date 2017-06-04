@@ -1,6 +1,6 @@
 //
 //  GameScene.swift
-//  Testy
+//  TunaCat
 //
 //  Created by Nicholas Dixon on 6/1/17.
 //  Copyright © 2017 Nicholas Dixon. All rights reserved.
@@ -29,6 +29,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     
+    var second: Int = 0
+    var timer = SKLabelNode()
     private var cat = SKSpriteNode(imageNamed: "myCat")
     private var kitchen = SKSpriteNode(imageNamed: "kitchen_background")
     private var tunaCan = SKSpriteNode(imageNamed: "tunaCan")
@@ -78,6 +80,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(challange)
         backgroundColor = SKColor.white
         
+        
+        //timer properties
+        timer.fontName = "HelveticaNeue"
+        timer.position = CGPoint(x:99,y: frame.size.height - 30)
+        timer.fontColor = SKColor.black
+        timer.zPosition = 6
+        addChild(timer)
+        
+  
+  
+        
+        
     }
     
     func createLevels() {
@@ -87,10 +101,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                           TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 2)],
                          [TCLevelDef(withActionFunc: launchShoe, andActionPause: 1),
                           TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 1)],
-                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.7),
-                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.7)],
-                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.05),
-                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.05)],
+                        
         ]
         
         for levelDef in levelDefs {
@@ -100,8 +111,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startActions() {
         let level = currentLevel < levels.count ? currentLevel : levels.count - 1
+        second = 0
+        run(SKAction.repeatForever(SKAction.sequence([SKAction.run({self.second = self.second + 1;self.timer.text = "\(self.second) seconds" }),SKAction.wait(forDuration: 1)])))
+        
         for levelDef in levels[level] {
             run(SKAction.repeatForever(SKAction.sequence([SKAction.run(levelDef.actionFunc),SKAction.wait(forDuration: levelDef.actionPause)])))
+            
         }
     }
     
