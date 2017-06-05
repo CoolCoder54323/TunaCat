@@ -41,7 +41,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var challange = SKLabelNode()
     private var levels: [[TCLevelDef]] = []
     private var currentLevel: Int = 0
-    
+
+    private var endScene: SKSpriteNode?
+    private var endSceneImageNames = ["endScene1","endScene2","endScene3","endScene4","endScene5","endScene6","endScene7"]
+    private var currentEndScene: Int = 0
+    private var isGameEnded = false
+
     override func didMove(to view: SKView) {
         
         cat.name = "kitty"
@@ -87,20 +92,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timer.fontColor = SKColor.black
         timer.zPosition = 6
         addChild(timer)
+    
+        
+        
+        
+    }
+    
+    func endGame() {
+        isGameEnded = true
+        removeAllActions()
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(showEndScene),SKAction.wait(forDuration: 4),SKAction.run({self.currentEndScene += 1})]), count: endSceneImageNames.count))
+    }
+    
+    func showEndScene() {
+        removeAllChildren()
+        if currentEndScene < endSceneImageNames.count {
+            endScene = SKSpriteNode(imageNamed: endSceneImageNames[currentEndScene])
+            endScene?.position = CGPoint(x: size.width/2, y: size.height/2)
+            endScene?.zPosition = 11
+            endScene?.size = CGSize(width: frame.size.width, height: frame.size.height + 20)
+            addChild(endScene!)
+        }
+    }
+    
+    
+    func movingTuna(){
+        
+        tunaCan.run(
+            SKAction.moveBy(x: -frame.size.width + 130, y: 0.0,duration: 12))
+        
+    }
+    
+    func movingTunaFast(){
+        tunaCan.run(SKAction.sequence([
+            SKAction.moveBy(x: -frame.size.width + 130, y: 0.0,duration: 4),
+            SKAction.moveBy(x: frame.size.width , y: 0.0,duration: 4),
+            SKAction.moveBy(x: -frame.size.width, y: 0.0,duration: 4)]))
+
     }
     
     func createLevels() {
         let levelDefs = [[],
                          [TCLevelDef(withActionFunc: launchShoe, andActionPause: 2)],
                          [TCLevelDef(withActionFunc: launchShoe, andActionPause: 2),
-                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 2)],
+                         TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 2),
+                         TCLevelDef(withActionFunc: movingTuna, andActionPause: 100)],
                          [TCLevelDef(withActionFunc: launchShoe, andActionPause: 1),
-                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 1)],
-                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.5),
-                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.5)],
-                         [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.25),
-                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.25)]
-                        ]
+                          TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 1),
+                            TCLevelDef(withActionFunc: movingTunaFast, andActionPause: 100)],
+                        [TCLevelDef(withActionFunc: launchShoe, andActionPause: 0.5),
+                        TCLevelDef(withActionFunc: throwSprayBottle, andActionPause: 0.5),
+                        TCLevelDef(withActionFunc: movingTunaFast, andActionPause: 100)]
+        ]
         
         for levelDef in levelDefs {
             levels.append(levelDef)
@@ -114,7 +157,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let level = currentLevel < levels.count ? currentLevel : levels.count - 1
         for levelDef in levels[level] {
             run(SKAction.repeatForever(SKAction.sequence([SKAction.run(levelDef.actionFunc),SKAction.wait(forDuration: levelDef.actionPause)])))
-            
         }
     }
     
@@ -180,17 +222,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func endGameAndPause(withLevelCleared isLevelCleared: Bool) {
-        //tunaCan.physicsBody?.affectedByGravity = true
-        levelClearedLabel.isHidden = false
-        backgroundColor = SKColor.black
-        kitchen.isHidden = true
-        tunaCan.isHidden = true
-        cat.isHidden = true
-        levelCleared = true
-        levelClearedLabel.text = isLevelCleared ? "Level Cleared!!!" : "Level Fail!!!"
-        currentLevel = isLevelCleared ? currentLevel + 1 : currentLevel
-        endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
-        removeAllActions()
+        if currentLevel < levels.count {
+            levelClearedLabel.isHidden = false
+            backgroundColor = SKColor.black
+            kitchen.isHidden = true
+            tunaCan.isHidden = true
+            cat.isHidden = true
+            levelCleared = true
+            levelClearedLabel.text = isLevelCleared ? "Level Cleared!!!" : "Level Fail!!!"
+            currentLevel = isLevelCleared ? currentLevel + 1 : currentLevel
+            endGamePauseTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(setNeedsRestart), userInfo: nil, repeats: false)
+            removeAllActions()
+        } else {
+            removeAllChildren()
+            endGame()
+        }
     }
     
     //MARK: PhysicsBody Config Helper Functions
@@ -219,12 +265,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: Touch Handling Functions
     func touchDown(atPoint pos : CGPoint) {
         guard endGamePauseTimer == nil && !levelCleared else { return }
-        
-        if needsRestart {
-            startOver()
-        } else {
-            let multiplier = pos.x > size.width/2 ? 1 : -1
-            cat.physicsBody?.applyImpulse(CGVector(dx: multiplier*3, dy: 5))
+        if !isGameEnded {
+            if needsRestart {
+                startOver()
+            } else {
+                let multiplier = pos.x > size.width/2 ? 1 : -1
+                cat.physicsBody?.applyImpulse(CGVector(dx: multiplier*3, dy: 5))
+            }
         }
     }
     
